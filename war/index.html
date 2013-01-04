@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>類語ジェネレーター</title>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+<script>
+	$(function() {
+		$('#out-window').height(
+				$(window).height() - $('#out-window').offset().top);
+
+		$('form').on('submit', function() {
+			$.ajax(this.action, {
+				data : $(this).serialize()
+			}).then(function(data) {
+				var strs = data.split(' ');
+				var $out = $('#out').empty();
+				$.each(strs, function(i, str) {
+					str && $('<li>').text(str).appendTo($out);
+				});
+			});
+			return false;
+		})
+	});
+</script>
+</head>
+<body style="overflow: hidden;">
+	<form action="generate" class="form-horizontal">
+		<pre>【注意】
+1. ひらがなのみ入力してください。
+2. 元の単語が4文字以上かつ、必ず含む単語が指定されていないと、処理にものすごく時間がかかります。</pre>
+		<legend>類語ジェネレーター</legend>
+		<div class="control-group">
+			<label class="control-label" for="q">元の単語</label>
+			<div class="controls">
+				<input type="text" id="q" name="q" value="くりすます" required="required" pattern="^[あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ]+$">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="f">必ず含む単語</label>
+			<div class="controls">
+				<input type="text" id="f" name="f" value="ます" pattern="^[あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ]+$">
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<input type="submit" class="btn btn-large" value="ジェネレート">
+			</div>
+		</div>
+	</form>
+	<legend>結果</legend>
+	<div id="out-window" style="overflow: auto;">
+		<ul id="out" class="unstyled">
+		</ul>
+	</div>
+</body>
+</html>
